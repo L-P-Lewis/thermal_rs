@@ -1,8 +1,9 @@
 use std::iter;
 
-use crate::material::Material;
+use crate::{Volume, material::Material};
 
 /// Represents a thermal simulation at a given state in time
+#[derive(Debug, Clone)]
 pub struct ThermalSimulation {
     /// The number of cells in the x direction
     cells_x: u64,
@@ -36,5 +37,25 @@ impl ThermalSimulation {
             energy: Vec::from_iter(iter::repeat_n(0.0, (cells_x * cells_y * cells_z) as usize)),
             materials: Vec::from_iter(iter::repeat_n(0, (cells_x * cells_y * cells_z) as usize)),
         };
+    }
+
+    /// Advances the simulation by a given ammount of time
+    pub fn advance_simulation(&mut self, delta_time: f64) {
+        todo!()
+    }
+
+    /// Sets the material of all cells in a given volume
+    pub fn set_material(&mut self, volume: Volume, material: Material) {
+        todo!()
+    }
+
+    /// Sets the temperature of all cells in a given volume
+    pub fn set_temperature(&mut self, volume: Volume, temperature: f64) {
+        todo!()
+    }
+
+    /// Adds energy to all cells in a given volume
+    pub fn add_energy(&mut self, volume: Volume, energy: f64) {
+        todo!()
     }
 }
