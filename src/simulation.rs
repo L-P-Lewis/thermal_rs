@@ -6,21 +6,21 @@ use crate::{material::Material, volume::CellIterator};
 #[derive(Debug, Clone)]
 pub struct SimulationState {
     /// The number of cells in the x direction
-    cells_x: u64,
+    pub cells_x: u64,
     /// The number of cells in the y direction
-    cells_y: u64,
+    pub cells_y: u64,
     /// The number of cells in the z direction
-    cells_z: u64,
+    pub cells_z: u64,
     /// The side dimension of cells in meters
-    cell_size: f64,
+    pub cell_size: f64,
     /// Energy data
-    energy: Vec<f64>,
+    pub energy: Vec<f64>,
     /// Density data
-    density: Vec<f64>,
+    pub density: Vec<f64>,
     /// Specific Heat data
-    specific_heat: Vec<f64>,
+    pub specific_heat: Vec<f64>,
     /// Thermal Conductivity data
-    thermal_conductivity: Vec<f64>,
+    pub thermal_conductivity: Vec<f64>,
 }
 
 impl SimulationState {
