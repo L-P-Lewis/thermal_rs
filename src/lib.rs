@@ -15,3 +15,14 @@ pub mod volume;
 /// materials within the simulation reigon, and a snapshot represents the distribution of thermal
 /// energy within the simulation reigon.
 pub mod world;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn simple_world_test() {
+        let world = world::SimWorldBuilder::new(1.0, 1.0, 1.0)
+            .build(0.1, 10, std::path::Path::new("./simple_world.yml"))
+            .unwrap();
+    }
+}

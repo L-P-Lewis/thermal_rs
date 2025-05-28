@@ -1,0 +1,102 @@
+x_size: 1000
+y_size: 1000
+z_size: 1000
+cell_size: 0.01
+chunk_size: 10
+materials: 
+-
+  density: 1000
+  specific_heat: 1000
+  thermal_con_a: 0
+  thermal_con_b: 0
+  thermal_con_c: 0
+-
+  density: 1000
+  specific_heat: 4000
+  thermal_con_a: -0.000006454
+  thermal_con_b: 0.005208
+  thermal_con_c: -0.3686
+chunks: 
+- AQD/Af8B/wHpAQ==
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=
+- /wH/Af8B6wE=

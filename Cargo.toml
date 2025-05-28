@@ -7,6 +7,7 @@ readme = "README.md"
 license = "MIT"
 
 [dependencies]
+base64 = "0.22.1"
 
 [features]
 cpu_single = []
