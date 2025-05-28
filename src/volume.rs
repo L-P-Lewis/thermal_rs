@@ -2,7 +2,7 @@
 /// (x, y, z) positions of cells within the volume
 pub trait CellIterator {
     /// Create an iterator over all positions within a given volume with a given cell size
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>>;
+    fn cell_iter(self: &Self, cell_size: &f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>>;
 }
 
 /// Struct for representing an axis aligned volume
@@ -38,7 +38,7 @@ impl AABBVolume {
 }
 
 impl CellIterator for AABBVolume {
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>> {
+    fn cell_iter(self: &Self, cell_size: &f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>> {
         return Box::new(AABBVolumeIter {
             min_x: self.min_x.floor() as u64,
             min_y: self.min_y.floor() as u64,

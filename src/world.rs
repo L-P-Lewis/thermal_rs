@@ -1,4 +1,4 @@
-use crate::{material::Material, volume::CellIterator};
+use crate::{material, material::Material, volume::CellIterator};
 
 /// A builder for simulation worlds
 ///
@@ -11,7 +11,7 @@ use crate::{material::Material, volume::CellIterator};
 /// // half fill it with water, and build it with a 1cm voxel size
 /// let newWorld = SimWorldBuilder::new(1.0, 1.0, 1.0)
 ///     .with_material(material::WATER, Box::new(AABBVolume::new(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)))
-///     .build(0.001);
+///     .build(0.1);
 /// ```
 #[derive(Default)]
 pub struct SimWorldBuilder {
@@ -40,7 +40,67 @@ impl SimWorldBuilder {
 
     /// Build the world with a given voxel resolution
     pub fn build(self, resolution: f64) -> SimWorld {
-        todo!()
+        // Get world size
+        let world_size_x = (self.x_size / resolution).ceil() as u64;
+        let world_size_y = (self.y_size / resolution).ceil() as u64;
+        let world_size_z = (self.z_size / resolution).ceil() as u64;
+
+        // Initialize material map data
+        let mut material_map: Vec<Material> = Vec::new();
+        material_map.push(material::BLANK);
+        let mut materials: Vec<u8> = Vec::from_iter(std::iter::repeat_n(
+            0 as u8,
+            (world_size_z * world_size_y * world_size_x) as usize,
+        ));
+
+        // Fill in materials from brushes
+        for (mat, brush) in self.brush_opperations.iter() {
+            // Find index of first instance of material in map, or add it to the map and get index
+            // of new value
+            let ind: usize = {
+                let mut found: Option<usize> = None;
+                for i in 0..material_map.len() {
+                    if material_map
+                        .get(i)
+                        .expect("i should be in bounds of material_map")
+                        == mat
+                    {
+                        found = Some(i);
+                        break;
+                    }
+                }
+                if let Some(i) = found {
+                    i
+                } else {
+                    material_map.push(mat.clone());
+                    material_map.len() - 1
+                }
+            };
+
+            assert!(
+                ind < u8::MAX as usize,
+                "A simulation world can not have more than 256 unique materials"
+            );
+
+            // Set material index of all cells in brush
+            for (x, y, z) in brush.cell_iter(&resolution) {
+                if let Some(m) = materials
+                    .get_mut((x + y * world_size_x + z * (world_size_x * world_size_y)) as usize)
+                {
+                    *m = ind as u8;
+                }
+            }
+        }
+
+        // Return new sim world
+        return SimWorld {
+            x_size: world_size_x as usize,
+            y_size: world_size_y as usize,
+            z_size: world_size_z as usize,
+            cell_size: resolution,
+            material_map,
+            materials,
+        };
     }
 }
 
@@ -66,7 +126,7 @@ pub struct SimWorld {
     // A list of all materials present in the simulation world
     material_map: Vec<Material>,
     // A map of all materials in the world, indexing into the material_map
-    materials: Vec<usize>,
+    materials: Vec<u8>,
 }
 
 impl SimWorld {
