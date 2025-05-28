@@ -2,6 +2,9 @@
 name = "thermal_rs"
 version = "0.0.0"
 edition = "2024"
+description = "Thermal Conduction Simulation Library"
+readme = "README.md"
+license = "MIT"
 
 [dependencies]
 

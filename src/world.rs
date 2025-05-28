@@ -1,17 +1,8 @@
-use std::{error, iter, usize};
-
 use crate::{material::Material, volume::CellIterator};
 
 /// A builder for simulation worlds
 ///
 /// Used to create a static simulation world
-/// ``` rust
-/// use crate::world::SimWorldBuilder;
-/// // Explicitly place the blank material in the lowermost octant of the world
-/// let world = SimWorldBuilder::new(1.0, 1.0, 1.0)
-///     .with_material(Material::blank(), AABBVolume::new(0.0, 0.0, 0.0, 0.5, 0.5, 0.5))
-///     .build(0.1);
-/// ```
 pub struct SimWorldBuilder {}
 
 impl SimWorldBuilder {

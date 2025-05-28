@@ -7,5 +7,10 @@ pub mod material;
 pub mod runner;
 /// Definition of sim volumes and brushes
 pub mod volume;
-/// Sefinitoin of simulation worlds
+
+/// Thermal Simulation World utilities
+///
+/// Thermal Simulations opperate on a world, and a snapshot. A world represents the layout of
+/// materials within the simulation reigon, and a snapshot represents the distribution of thermal
+/// energy within the simulation reigon.
 pub mod world;
