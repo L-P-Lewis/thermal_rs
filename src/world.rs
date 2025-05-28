@@ -54,7 +54,20 @@ pub enum SimStateOppError {
 }
 
 /// Represents a world in which a simulation can be run
-pub struct SimWorld {}
+pub struct SimWorld {
+    // The x dimension of the simulation world, in cells
+    x_size: usize,
+    // The y dimension of the simulation world, in cells
+    y_size: usize,
+    // The z dimension of the simulation world, in cells
+    z_size: usize,
+    // The side length of cells in meters
+    cell_size: f64,
+    // A list of all materials present in the simulation world
+    material_map: Vec<Material>,
+    // A map of all materials in the world, indexing into the material_map
+    materials: Vec<usize>,
+}
 
 impl SimWorld {
     /// Samples the material stats at the voxel closest to the given point, returns None if given
