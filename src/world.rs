@@ -3,17 +3,29 @@ use crate::{material::Material, volume::CellIterator};
 /// A builder for simulation worlds
 ///
 /// Used to create a static simulation world
-pub struct SimWorldBuilder {}
+#[derive(Default)]
+pub struct SimWorldBuilder {
+    x_size: f64,
+    y_size: f64,
+    z_size: f64,
+    brush_opperations: Vec<(Material, Box<dyn CellIterator>)>,
+}
 
 impl SimWorldBuilder {
     /// Create a new builder, defining the dimensions of the world to be built
     pub fn new(x_size: f64, y_size: f64, z_size: f64) -> Self {
-        todo!()
+        SimWorldBuilder {
+            x_size,
+            y_size,
+            z_size,
+            brush_opperations: Vec::new(),
+        }
     }
 
     /// Applies a material type to a volume defined by a brush
-    pub fn with_materials(mut self, material: Material, brush: &impl CellIterator) -> Self {
-        todo!()
+    pub fn with_materials(mut self, material: Material, brush: Box<dyn CellIterator>) -> Self {
+        self.brush_opperations.push((material, brush));
+        return self;
     }
 
     /// Build the world with a given voxel resolution

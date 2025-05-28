@@ -1,12 +1,12 @@
 /// Default material aproximating the properties of water at sea level atmospheric pressure
-static WATER: Material = Material {
+pub static WATER: Material = Material {
     density: 1000.0,
     specific_heat: 4000.0,
     thermal_conductivity: (-0.000006454, 0.005208, -0.3686),
 };
 
 /// Represents a material type
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Material {
     /// The density of the material in kg/m^3
     pub density: f64,

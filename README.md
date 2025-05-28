@@ -11,13 +11,13 @@ thermal_rs provides utlities for preforming discreet simulations of heat conduct
 ## Usage
 
 ```rust
-use thermal_rs::{world::{SimWorld, SimWorldBuilder, SimState}, material::Material, volume::AABBVolume, runner::{SimRunner, cpu::CPUSimRunner}};
+use thermal_rs::{world::{SimWorld, SimWorldBuilder, SimState}, material, material::Material, volume::AABBVolume, runner::{SimRunner, cpu::CPUSimRunner}};
 
 fn main() {
     // Create a simulation world with a base of water and a resolution of 1 voxel/cm
     let sim_world = SimWorldBuilder::new(10.0, 10.0, 10.0)
         .with_materials(
-            Material {density: 10.0, specific_heat: 4187.0, thermal_conductivity:7000.0},
+            material::WATER,
             &AABBVolume::new(0.0, 0.0, 0.0, 10.0, 5.0, 10.0)
         ).build(0.001);
 

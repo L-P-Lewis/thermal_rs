@@ -1,4 +1,5 @@
 #![deny(missing_docs)]
+#![allow(unused)]
 #![doc = include_str!("../README.md")]
 
 /// Definition for simulation materials
