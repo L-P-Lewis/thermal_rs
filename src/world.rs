@@ -1,0 +1,78 @@
+use std::{error, iter, usize};
+
+use crate::{material::Material, volume::CellIterator};
+
+/// A builder for simulation worlds
+///
+/// Used to create a static simulation world
+/// ``` rust
+/// use crate::world::SimWorldBuilder;
+/// // Explicitly place the blank material in the lowermost octant of the world
+/// let world = SimWorldBuilder::new(1.0, 1.0, 1.0)
+///     .with_material(Material::blank(), AABBVolume::new(0.0, 0.0, 0.0, 0.5, 0.5, 0.5))
+///     .build(0.1);
+/// ```
+pub struct SimWorldBuilder {}
+
+impl SimWorldBuilder {
+    /// Create a new builder, defining the dimensions of the world to be built
+    pub fn new(x_size: f64, y_size: f64, z_size: f64) -> Self {
+        todo!()
+    }
+
+    /// Applies a material type to a volume defined by a brush
+    pub fn with_materials(mut self, material: Material, brush: &impl CellIterator) -> Self {
+        todo!()
+    }
+
+    /// Build the world with a given voxel resolution
+    pub fn build(self, resolution: f64) -> SimWorld {
+        todo!()
+    }
+}
+
+/// Possible errors when operating on sim states
+#[derive(Debug)]
+pub enum SimStateOppError {
+    /// Missmatch between sizes of a simulation state and a simulaton world
+    StateSizeMissmatch,
+    /// Missmatch between resolution of a simulation state and a simulaton world
+    StateResolutionMissmatch,
+}
+
+/// Represents a world in which a simulation can be run
+pub struct SimWorld {}
+
+impl SimWorld {
+    /// Samples the material stats at the voxel closest to the given point, returns None if given
+    /// point is out of bounds
+    pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<Material> {
+        todo!()
+    }
+
+    /// Gets a simulation state with no thermal energy
+    pub fn get_blank_sim_state(&self) -> SimState {
+        todo!()
+    }
+
+    /// Sets the temperature of a simulation state within a brush. Fails if state has a differnet
+    /// resolution or bounds size
+    pub fn set_sim_state_temperature(
+        &self,
+        sim_state: SimState,
+        temperature: f64,
+        brush: &impl CellIterator,
+    ) -> Result<SimState, SimStateOppError> {
+        todo!()
+    }
+}
+
+/// Represents the distribution of thermal energy in a simulation world at a given state in time
+pub struct SimState {}
+
+impl SimState {
+    /// Samples the thermal energy closest to a given point, returns None if out of bounds
+    pub fn sample_energy(&self, x: f64, y: f64, z: f64) -> Option<f64> {
+        todo!()
+    }
+}

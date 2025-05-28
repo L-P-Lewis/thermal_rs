@@ -1,9 +1,8 @@
-/// Helper functions and traits for thermal simulations
-
 /// Trait for structs which represent a volume of world space, returns an iterator over tupes of
 /// (x, y, z) positions of cells within the volume
 pub trait CellIterator {
-    fn cell_iter(&self, cell_size: f64) -> impl Iterator<Item = (u64, u64, u64)>;
+    /// Create an iterator over all positions within a given volume with a given cell size
+    fn cell_iter(self: &Self, cell_size: f64) -> impl Iterator<Item = (u64, u64, u64)>;
 }
 
 /// Struct for representing an axis aligned volume
@@ -18,6 +17,7 @@ pub struct AABBVolume {
 }
 
 impl AABBVolume {
+    /// Create a new AABB Volume
     pub fn new(
         min_x: f64,
         min_y: f64,
@@ -38,7 +38,7 @@ impl AABBVolume {
 }
 
 impl CellIterator for AABBVolume {
-    fn cell_iter(&self, cell_size: f64) -> impl Iterator<Item = (u64, u64, u64)> {
+    fn cell_iter(self: &Self, cell_size: f64) -> impl Iterator<Item = (u64, u64, u64)> {
         return AABBVolumeIter {
             min_x: self.min_x.floor() as u64,
             min_y: self.min_y.floor() as u64,

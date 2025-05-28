@@ -1,4 +1,6 @@
 #[derive(Debug, PartialEq, Clone)]
+
+/// Represents a material type
 pub struct Material {
     /// The density of the material in kg/m^3
     pub density: f64,
@@ -9,15 +11,12 @@ pub struct Material {
 }
 
 impl Material {
-    pub fn new(density: f64, specific_heat: f64, thermal_conductivity: f64) -> Material {
-        return Material {
-            density,
-            specific_heat,
-            thermal_conductivity,
-        };
-    }
-
+    /// Get the "blank" material type, a perfect insulator
     pub fn blank() -> Material {
-        Material::new(1.0, 1.0, 0.0)
+        Material {
+            density: 1.0,
+            specific_heat: 1.0,
+            thermal_conductivity: 0.0,
+        }
     }
 }

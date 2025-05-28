@@ -1,7 +1,8 @@
-use std::error::Error;
+use std::{error::Error, future::Future};
 
-use crate::simulation::SimulationState;
+use crate::world::{SimState, SimWorld};
 
+/// Single Threaded CPU based simulator
 pub mod cpu;
 
 /// Trait for simulation runners
@@ -11,8 +12,9 @@ pub trait SimRunner {
     /// Advance the simulation by a given ammount of time, with the given timestep
     fn advace_simulation(
         &mut self,
-        current_state: &SimulationState,
+        world: &SimWorld,
+        current_state: &SimState,
         advace_time: f64,
         timestep: f64,
-    ) -> impl Future<Output = Result<SimulationState, &(dyn Error)>> + Send;
+    ) -> impl Future<Output = Result<SimWorld, &(dyn Error)>> + Send;
 }
