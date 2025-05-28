@@ -2,7 +2,17 @@ use crate::{material::Material, volume::CellIterator};
 
 /// A builder for simulation worlds
 ///
-/// Used to create a static simulation world
+/// Used to create a static simulation world.
+///
+/// ## Example
+/// ```
+/// # use thermal_rs::{world::SimWorldBuilder, material, volume::AABBVolume};
+/// // Create a new world with a 1 meter cubic sim area
+/// // half fill it with water, and build it with a 1cm voxel size
+/// let newWorld = SimWorldBuilder::new(1.0, 1.0, 1.0)
+///     .with_material(material::WATER, Box::new(AABBVolume::new(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)))
+///     .build(0.001);
+/// ```
 #[derive(Default)]
 pub struct SimWorldBuilder {
     x_size: f64,
@@ -23,7 +33,7 @@ impl SimWorldBuilder {
     }
 
     /// Applies a material type to a volume defined by a brush
-    pub fn with_materials(mut self, material: Material, brush: Box<dyn CellIterator>) -> Self {
+    pub fn with_material(mut self, material: Material, brush: Box<dyn CellIterator>) -> Self {
         self.brush_opperations.push((material, brush));
         return self;
     }
