@@ -2,7 +2,7 @@
 /// (x, y, z) positions of cells within the volume
 pub trait CellIterator {
     /// Create an iterator over all positions within a given volume with a given cell size
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>>;
+    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (usize, usize, usize)>>;
 }
 
 /// Struct for representing an axis aligned volume
@@ -38,14 +38,14 @@ impl AABBVolume {
 }
 
 impl CellIterator for AABBVolume {
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (u64, u64, u64)>> {
+    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (usize, usize, usize)>> {
         return Box::new(AABBVolumeIter {
-            min_x: self.min_x.floor() as u64,
-            min_y: self.min_y.floor() as u64,
-            min_z: self.min_z.floor() as u64,
-            len_x: ((self.max_x - self.min_x) / cell_size).ceil() as u64,
-            len_y: ((self.max_y - self.min_y) / cell_size).ceil() as u64,
-            len_z: ((self.max_z - self.min_z) / cell_size).ceil() as u64,
+            min_x: self.min_x.floor() as usize,
+            min_y: self.min_y.floor() as usize,
+            min_z: self.min_z.floor() as usize,
+            len_x: ((self.max_x - self.min_x) / cell_size).ceil() as usize,
+            len_y: ((self.max_y - self.min_y) / cell_size).ceil() as usize,
+            len_z: ((self.max_z - self.min_z) / cell_size).ceil() as usize,
             x: 0,
             y: 0,
             z: 0,
@@ -54,19 +54,19 @@ impl CellIterator for AABBVolume {
 }
 
 struct AABBVolumeIter {
-    min_x: u64,
-    min_y: u64,
-    min_z: u64,
-    len_x: u64,
-    len_y: u64,
-    len_z: u64,
-    x: u64,
-    y: u64,
-    z: u64,
+    min_x: usize,
+    min_y: usize,
+    min_z: usize,
+    len_x: usize,
+    len_y: usize,
+    len_z: usize,
+    x: usize,
+    y: usize,
+    z: usize,
 }
 
 impl Iterator for AABBVolumeIter {
-    type Item = (u64, u64, u64);
+    type Item = (usize, usize, usize);
     fn next(&mut self) -> Option<Self::Item> {
         if self.z > self.len_z {
             return None;
