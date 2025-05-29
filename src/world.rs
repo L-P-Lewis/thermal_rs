@@ -13,7 +13,7 @@ use crate::{
 /// ```
 /// # use thermal_rs::{world::SimWorldBuilder, material, volume::AABBVolume};
 /// // Create a new world with a 1 meter cubic sim area
-/// // half fill it with water, and build it with a 1cm voxel size
+/// // half fill it with water, and build it with a 10cm voxel size
 /// let newWorld = SimWorldBuilder::new(1.0, 1.0, 1.0)
 ///     .with_material(material::WATER, Box::new(AABBVolume::new(0.0, 0.0, 0.0, 1.0, 0.5, 1.0)))
 ///     .build(0.1);
@@ -114,8 +114,6 @@ impl SimWorldBuilder {
 pub enum SimStateOppError {
     /// Missmatch between sizes of a simulation state and a simulaton world
     StateSizeMissmatch,
-    /// Missmatch between resolution of a simulation state and a simulaton world
-    StateResolutionMissmatch,
 }
 
 /// Represents a world in which a simulation can be run
@@ -145,7 +143,7 @@ impl SimWorld {
         )
     }
 
-    /// Get the material value at a given voxel
+    /// Get the material value at a given voxel. Returns none if voxel is out of bounds.
     pub fn get_voxel_material(&self, x: usize, y: usize, z: usize) -> Option<&Material> {
         let pos_to_index = |x: usize, y: usize, z: usize| {
             if x < self.x_size && y < self.x_size && z < self.y_size {
@@ -169,29 +167,90 @@ impl SimWorld {
         return self.material_map.get(world_value);
     }
 
-    /// Gets a simulation state with no thermal energy
+    /// Gets a simulation state with no thermal energy.
     pub fn get_blank_sim_state(&self) -> SimState {
-        todo!()
+        let mut energies: Vec<f32> = Vec::new();
+        energies.resize(self.x_size * self.y_size * self.z_size, 0.0);
+        SimState { energies }
     }
 
     /// Sets the temperature of a simulation state within a brush. Fails if state has a differnet
-    /// resolution or bounds size
+    ///  bounds size
     pub fn set_sim_state_temperature(
         &self,
-        sim_state: SimState,
+        mut sim_state: SimState,
         temperature: f64,
         brush: &impl CellIterator,
     ) -> Result<SimState, SimStateOppError> {
-        todo!()
+        if sim_state.energies.len() != self.z_size * self.y_size * self.x_size {
+            return Err(SimStateOppError::StateSizeMissmatch);
+        }
+        let pos_to_index = |(x, y, z)| {
+            if x < self.x_size && y < self.x_size && z < self.y_size {
+                Some(x + y * self.x_size + z * self.x_size * self.y_size)
+            } else {
+                None
+            }
+        };
+        let cell_volume = self.cell_size.powf(3.0);
+        for index in brush
+            .cell_iter(self.cell_size)
+            .filter_map(|x| pos_to_index(x))
+        {
+            let cell_mat_id = self
+                .materials
+                .get(index)
+                .expect("Indicies are pre-verified");
+            let cell_material = self
+                .material_map
+                .get(*cell_mat_id as usize)
+                .expect("Cell material IDs are static and must be valid");
+            let cell_mass = cell_volume * cell_material.density;
+            if let Some(e) = sim_state.energies.get_mut(index) {
+                *e = (temperature * cell_mass * cell_material.specific_heat) as f32;
+            }
+        }
+        return Ok(sim_state);
+    }
+
+    /// Samples the temperature of a given voxel. Returns None if given position is out of bounds
+    /// or simulation state is of the wrong size
+    fn sample_voxel_temperature(
+        &self,
+        sim_state: &SimState,
+        x: usize,
+        y: usize,
+        z: usize,
+    ) -> Option<f32> {
+        if sim_state.energies.len() != self.materials.len() {
+            return None;
+        }
+        if x >= self.x_size || y >= self.y_size || z > self.z_size {
+            let index = x + y * self.x_size + z * self.x_size * self.y_size;
+            let cell_mat_id = self
+                .materials
+                .get(index)
+                .expect("Indicies are pre-verified");
+            let cell_material = self
+                .material_map
+                .get(*cell_mat_id as usize)
+                .expect("Cell material IDs are static and must be valid");
+            let cell_energy = sim_state
+                .energies
+                .get(*cell_mat_id as usize)
+                .expect("State is already known to be correct size");
+            let cell_mass = self.cell_size.powf(3.0) * cell_material.density;
+
+            return Some(cell_energy / (cell_mass * cell_material.specific_heat) as f32);
+        } else {
+            return None;
+        }
     }
 }
 
 /// Represents the distribution of thermal energy in a simulation world at a given state in time
-pub struct SimState {}
-
-impl SimState {
-    /// Samples the thermal energy closest to a given point, returns None if out of bounds
-    pub fn sample_energy(&self, x: f64, y: f64, z: f64) -> Option<f64> {
-        todo!()
-    }
+///
+/// Has little meaning on it's own, is only usefull in the context of a [SimWorld]
+pub struct SimState {
+    energies: Vec<f32>,
 }

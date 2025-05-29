@@ -32,15 +32,11 @@ fn main() {
     let cpu_runner = CPUSimRunner {};
 
     // Calculate the simulation at an advanced state of 1 second into the future given a timestep of 0.01 seconds
-        cpu_runner.advance_simulation(
+    let sim_result = cpu_runner.advance_simulation(
             &sim_world,
             &initial_state,
             1.0,
             0.01
-        );
-
-    
+    );
 }
-
-
 ```
