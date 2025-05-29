@@ -1,3 +1,10 @@
+/// Default blank material
+pub static BLANK: Material = Material {
+    density: 1000.0,
+    specific_heat: 1000.0,
+    thermal_conductivity: (0.0, 0.0, 0.0),
+};
+
 /// Default material aproximating the properties of water at sea level atmospheric pressure
 pub static WATER: Material = Material {
     density: 1000.0,
