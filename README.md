@@ -14,12 +14,12 @@ thermal_rs provides utlities for preforming discreet simulations of heat conduct
 use thermal_rs::{world::{SimWorld, SimWorldBuilder, SimState}, material, material::Material, volume::AABBVolume, runner::{SimRunner, cpu::CPUSimRunner}};
 
 fn main() {
-    // Create a simulation world with a base of water and a resolution of 0.01 voxel/m
+    // Create a simulation world with a base of water and a resolution of 1 voxel/cm
     let sim_world = SimWorldBuilder::new(10.0, 10.0, 10.0)
         .with_material(
             material::WATER,
             Box::new(AABBVolume::new(0.0, 0.0, 0.0, 10.0, 5.0, 10.0))
-        ).build(0.01);
+        ).build(0.001);
 
     let mut initial_state = sim_world.get_blank_sim_state();
     initial_state = sim_world.set_sim_state_temperature(
@@ -36,7 +36,7 @@ fn main() {
             &sim_world,
             &initial_state,
             1.0,
-            0.1
+            0.01
         );
 
     
