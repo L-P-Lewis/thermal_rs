@@ -1,3 +1,5 @@
+use std::hash::Hash;
+
 /// Default blank material
 pub static BLANK: Material = Material {
     density: 1000.0,
@@ -33,3 +35,15 @@ impl Material {
         }
     }
 }
+
+impl Hash for Material {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        state.write_i64((self.density * 10.0) as i64);
+        state.write_i64((self.specific_heat * 10.0) as i64);
+        state.write_i64((self.thermal_conductivity.0 * 10.0) as i64);
+        state.write_i64((self.thermal_conductivity.1 * 10.0) as i64);
+        state.write_i64((self.thermal_conductivity.2 * 10.0) as i64);
+    }
+}
+
+impl Eq for Material {}
