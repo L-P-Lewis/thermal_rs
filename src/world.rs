@@ -133,6 +133,31 @@ pub struct SimWorld {
 }
 
 impl SimWorld {
+    /// Get the x dimension of the world
+    pub fn get_x_size(&self) -> usize {
+        self.x_size
+    }
+
+    /// Get the y dimension of the world
+    pub fn get_y_size(&self) -> usize {
+        self.y_size
+    }
+
+    /// Get the z dimension of the world
+    pub fn get_z_size(&self) -> usize {
+        self.z_size
+    }
+
+    /// Gets a non-mutable buffer representing the world cell materials
+    pub fn get_materials<'a>(&'a self) -> &'a [u8] {
+        self.materials.as_slice()
+    }
+
+    /// Gets a non-mutable buffer representing the material map
+    pub fn get_material_map<'a>(&'a self) -> &'a [Material] {
+        self.material_map.as_slice()
+    }
+
     /// Samples the material stats at the voxel closest to the given point, returns None if given
     /// point is out of bounds
     pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<&Material> {
