@@ -50,10 +50,8 @@ impl SimWorldBuilder {
         let world_y = (self.y_size / resolution).ceil() as usize;
         let world_z = (self.z_size / resolution).ceil() as usize;
 
-        let pos_in_bounds =
-            |x: usize, y: usize, z: usize| x < world_x && y < world_y && z < world_z;
         let pos_to_index = |x: usize, y: usize, z: usize| {
-            if pos_in_bounds(x, y, z) {
+            if x < world_x && y < world_y && z < world_z {
                 Some(x + y * world_x + z * world_x * world_y)
             } else {
                 None
@@ -139,8 +137,36 @@ pub struct SimWorld {
 impl SimWorld {
     /// Samples the material stats at the voxel closest to the given point, returns None if given
     /// point is out of bounds
-    pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<Material> {
-        todo!()
+    pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<&Material> {
+        self.get_voxel_material(
+            (x / self.cell_size).floor() as usize,
+            (y / self.cell_size).floor() as usize,
+            (z / self.cell_size).floor() as usize,
+        )
+    }
+
+    /// Get the material value at a given voxel
+    pub fn get_voxel_material(&self, x: usize, y: usize, z: usize) -> Option<&Material> {
+        let pos_to_index = |x: usize, y: usize, z: usize| {
+            if x < self.x_size && y < self.x_size && z < self.y_size {
+                Some(x + y * self.x_size + z * self.x_size * self.y_size)
+            } else {
+                None
+            }
+        };
+        let world_ind = match pos_to_index(x, y, z) {
+            Some(i) => i,
+            None => {
+                return None;
+            }
+        };
+        let world_value = match self.materials.get(world_ind) {
+            Some(i) => *i as usize,
+            None => {
+                return None;
+            }
+        };
+        return self.material_map.get(world_value);
     }
 
     /// Gets a simulation state with no thermal energy
