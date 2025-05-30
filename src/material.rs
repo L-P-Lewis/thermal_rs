@@ -18,21 +18,19 @@ pub static WATER: Material = Material {
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub struct Material {
     /// The density of the material in kg/m^3
-    pub density: f64,
+    pub density: f32,
     /// The specific heat of the material in J / K * kg
-    pub specific_heat: f64,
+    pub specific_heat: f32,
     /// Coefficients (a, b, c) for an equation for thermal conductivity C of the material in W / m K. Given as C = a*k^2 + b*c + c
-    pub thermal_conductivity: (f64, f64, f64),
+    pub thermal_conductivity: (f32, f32, f32),
 }
 
 impl Material {
-    /// Get the "blank" material type, a perfect insulator
-    pub fn blank() -> Material {
-        Material {
-            density: 1.0,
-            specific_heat: 1.0,
-            thermal_conductivity: (0.0, 0.0, 0.0),
-        }
+    /// Get the termal conductivity at the given termperature in kelvin
+    pub fn get_thermal_conductivity(&self, temp: f32) -> f32 {
+        self.thermal_conductivity.0 * temp.powf(2.0)
+            + self.thermal_conductivity.1 * temp
+            + self.thermal_conductivity.2
     }
 }
 

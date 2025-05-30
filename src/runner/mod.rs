@@ -7,7 +7,10 @@ pub mod cpu;
 
 #[derive(Debug)]
 /// Simulation Runtime Error
-pub enum SimError {}
+pub enum SimError {
+    /// The simulation state passed in is not a valid state of the simulatin
+    SimStateInvalid,
+}
 
 /// Trait for simulation runners
 ///

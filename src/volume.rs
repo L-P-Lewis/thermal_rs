@@ -2,29 +2,29 @@
 /// (x, y, z) positions of cells within the volume
 pub trait CellIterator {
     /// Create an iterator over all positions within a given volume with a given cell size
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (usize, usize, usize)>>;
+    fn cell_iter(self: &Self, cell_size: f32) -> Box<dyn Iterator<Item = (usize, usize, usize)>>;
 }
 
 /// Struct for representing an axis aligned volume
 #[derive(Debug, Clone)]
 pub struct AABBVolume {
-    min_x: f64,
-    min_y: f64,
-    min_z: f64,
-    max_x: f64,
-    max_y: f64,
-    max_z: f64,
+    min_x: f32,
+    min_y: f32,
+    min_z: f32,
+    max_x: f32,
+    max_y: f32,
+    max_z: f32,
 }
 
 impl AABBVolume {
     /// Create a new AABB Volume
     pub fn new(
-        min_x: f64,
-        min_y: f64,
-        min_z: f64,
-        max_x: f64,
-        max_y: f64,
-        max_z: f64,
+        min_x: f32,
+        min_y: f32,
+        min_z: f32,
+        max_x: f32,
+        max_y: f32,
+        max_z: f32,
     ) -> AABBVolume {
         AABBVolume {
             min_x,
@@ -38,7 +38,7 @@ impl AABBVolume {
 }
 
 impl CellIterator for AABBVolume {
-    fn cell_iter(self: &Self, cell_size: f64) -> Box<dyn Iterator<Item = (usize, usize, usize)>> {
+    fn cell_iter(self: &Self, cell_size: f32) -> Box<dyn Iterator<Item = (usize, usize, usize)>> {
         return Box::new(AABBVolumeIter {
             min_x: self.min_x.floor() as usize,
             min_y: self.min_y.floor() as usize,

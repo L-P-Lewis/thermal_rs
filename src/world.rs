@@ -20,15 +20,15 @@ use crate::{
 /// ```
 #[derive(Default)]
 pub struct SimWorldBuilder {
-    x_size: f64,
-    y_size: f64,
-    z_size: f64,
+    x_size: f32,
+    y_size: f32,
+    z_size: f32,
     brush_opperations: Vec<(Material, Box<dyn CellIterator>)>,
 }
 
 impl SimWorldBuilder {
     /// Create a new builder, defining the dimensions of the world to be built
-    pub fn new(x_size: f64, y_size: f64, z_size: f64) -> Self {
+    pub fn new(x_size: f32, y_size: f32, z_size: f32) -> Self {
         SimWorldBuilder {
             x_size,
             y_size,
@@ -44,7 +44,7 @@ impl SimWorldBuilder {
     }
 
     /// Build the world with a given voxel resolution
-    pub fn build(self, resolution: f64) -> SimWorld {
+    pub fn build(self, resolution: f32) -> SimWorld {
         // Get x y and z size of world in voxels
         let world_x = (self.x_size / resolution).ceil() as usize;
         let world_y = (self.y_size / resolution).ceil() as usize;
@@ -125,7 +125,7 @@ pub struct SimWorld {
     // The z dimension of the simulation world, in cells
     z_size: usize,
     // The side length of cells in meters
-    cell_size: f64,
+    cell_size: f32,
     // A list of all materials present in the simulation world
     material_map: Vec<Material>,
     // A map of all materials in the world, indexing into the material_map
@@ -167,9 +167,36 @@ impl SimWorld {
         }
     }
 
+    /// Gets the index of a cell position, returns None if out of bounds
+    pub fn get_ipos_index(&self, x: i128, y: i128, z: i128) -> Option<usize> {
+        if x < 0 || y < 0 || z < 0 {
+            return None;
+        }
+        if x < self.x_size as i128 && y < self.x_size as i128 && z < self.y_size as i128 {
+            Some(x as usize + y as usize * self.x_size + z as usize * self.x_size * self.y_size)
+        } else {
+            None
+        }
+    }
+
+    /// Get the 3d volume of a single cell
+    pub fn get_cell_volume(&self) -> f32 {
+        self.cell_size.powf(3.0) as f32
+    }
+
+    /// Get the side length of a cell
+    pub fn get_cell_length(&self) -> f32 {
+        self.cell_size
+    }
+
+    /// Check if a simulation state can be a valid state of this world
+    pub fn is_state_valid(&self, state: &SimState) -> bool {
+        self.materials.len() == state.energies.len()
+    }
+
     /// Samples the material stats at the voxel closest to the given point, returns None if given
     /// point is out of bounds
-    pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<&Material> {
+    pub fn sample_material(&self, x: f32, y: f32, z: f32) -> Option<&Material> {
         self.get_voxel_material(
             (x / self.cell_size).floor() as usize,
             (y / self.cell_size).floor() as usize,
@@ -206,14 +233,14 @@ impl SimWorld {
     pub fn set_sim_state_temperature(
         &self,
         mut sim_state: SimState,
-        temperature: f64,
+        temperature: f32,
         brush: &impl CellIterator,
     ) -> Result<SimState, SimStateOppError> {
-        if sim_state.energies.len() != self.z_size * self.y_size * self.x_size {
+        if !self.is_state_valid(&sim_state) {
             return Err(SimStateOppError::StateSizeMissmatch);
         }
 
-        let cell_volume = self.cell_size.powf(3.0);
+        let cell_volume = self.cell_size.powf(3.0) as f32;
         for index in brush
             .cell_iter(self.cell_size)
             .filter_map(|x| self.get_pos_index(x.0, x.1, x.2))
@@ -226,7 +253,7 @@ impl SimWorld {
                 .material_map
                 .get(*cell_mat_id as usize)
                 .expect("Cell material IDs are static and must be valid");
-            let cell_mass = cell_volume * cell_material.density;
+            let cell_mass: f32 = cell_volume * cell_material.density;
             if let Some(e) = sim_state.energies.get_mut(index) {
                 *e = (temperature * cell_mass * cell_material.specific_heat) as f32;
             }
@@ -260,7 +287,7 @@ impl SimWorld {
                 .energies
                 .get(*cell_mat_id as usize)
                 .expect("State is already known to be correct size");
-            let cell_mass = self.cell_size.powf(3.0) * cell_material.density;
+            let cell_mass = self.cell_size.powf(3.0) as f32 * cell_material.density;
 
             return Some(cell_energy / (cell_mass * cell_material.specific_heat) as f32);
         } else {
@@ -272,6 +299,29 @@ impl SimWorld {
 /// Represents the distribution of thermal energy in a simulation world at a given state in time
 ///
 /// Has little meaning on it's own, is only usefull in the context of a [SimWorld]
+#[derive(Debug, Clone)]
 pub struct SimState {
     energies: Vec<f32>,
+}
+
+impl SimState {
+    /// Get a non-mutable reference to the energies in this state
+    pub fn get_energies<'a>(&'a self) -> &'a [f32] {
+        self.energies.as_slice()
+    }
+
+    /// Applys a heat delta to all values in this sim state
+    pub fn apply_deltas<T: IntoIterator<Item = f32>>(&mut self, iter: T) {
+        for (cur, del) in self.energies.iter_mut().zip(iter) {
+            *cur += del;
+        }
+    }
+}
+
+impl FromIterator<f32> for SimState {
+    fn from_iter<T: IntoIterator<Item = f32>>(iter: T) -> Self {
+        SimState {
+            energies: Vec::from_iter(iter),
+        }
+    }
 }
