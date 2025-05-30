@@ -158,6 +158,15 @@ impl SimWorld {
         self.material_map.as_slice()
     }
 
+    /// Gets the index of a cell position, returns None if out of bounds
+    pub fn get_pos_index(&self, x: usize, y: usize, z: usize) -> Option<usize> {
+        if x < self.x_size && y < self.x_size && z < self.y_size {
+            Some(x + y * self.x_size + z * self.x_size * self.y_size)
+        } else {
+            None
+        }
+    }
+
     /// Samples the material stats at the voxel closest to the given point, returns None if given
     /// point is out of bounds
     pub fn sample_material(&self, x: f64, y: f64, z: f64) -> Option<&Material> {
@@ -170,14 +179,7 @@ impl SimWorld {
 
     /// Get the material value at a given voxel. Returns none if voxel is out of bounds.
     pub fn get_voxel_material(&self, x: usize, y: usize, z: usize) -> Option<&Material> {
-        let pos_to_index = |x: usize, y: usize, z: usize| {
-            if x < self.x_size && y < self.x_size && z < self.y_size {
-                Some(x + y * self.x_size + z * self.x_size * self.y_size)
-            } else {
-                None
-            }
-        };
-        let world_ind = match pos_to_index(x, y, z) {
+        let world_ind = match self.get_pos_index(x, y, z) {
             Some(i) => i,
             None => {
                 return None;
@@ -210,17 +212,11 @@ impl SimWorld {
         if sim_state.energies.len() != self.z_size * self.y_size * self.x_size {
             return Err(SimStateOppError::StateSizeMissmatch);
         }
-        let pos_to_index = |(x, y, z)| {
-            if x < self.x_size && y < self.x_size && z < self.y_size {
-                Some(x + y * self.x_size + z * self.x_size * self.y_size)
-            } else {
-                None
-            }
-        };
+
         let cell_volume = self.cell_size.powf(3.0);
         for index in brush
             .cell_iter(self.cell_size)
-            .filter_map(|x| pos_to_index(x))
+            .filter_map(|x| self.get_pos_index(x.0, x.1, x.2))
         {
             let cell_mat_id = self
                 .materials

@@ -1,4 +1,4 @@
-use crate::world::SimState;
+use crate::world::{SimState, SimWorld};
 
 use super::{SimError, SimRunner};
 
@@ -10,8 +10,8 @@ impl SimRunner for CPUSimRunner {
     /// a given timestep
     async fn advance_simulation(
         &self,
-        world: &crate::world::SimWorld,
-        current_state: &crate::world::SimState,
+        world: &SimWorld,
+        current_state: &SimState,
         advace_time: f64,
         timestep: f64,
     ) -> Result<SimState, SimError> {
