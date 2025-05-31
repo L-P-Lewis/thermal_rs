@@ -2,11 +2,12 @@ thermal_rs provides utlities for preforming discreet simulations of heat conduct
 
 ## Features
 
-- Creation of simulation worlds from brush based geometry and 3d models
+- [X] Creation of simulation worlds from brush based geometry 
+- [ ] Addition of 3d models to simulation worlds
 - Provides multiple implementations of heat flow simulation
-    - Single Threaded CPU simulation
-    - Multithreaded CPU simulation
-    - GPU simulation
+    - [x] Single Threaded CPU simulation
+    - [ ] Multithreaded CPU simulation
+    - [ ] GPU simulation
 
 ## Usage
 

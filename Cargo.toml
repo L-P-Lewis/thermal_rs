@@ -1,9 +1,9 @@
 [package]
 name = "thermal_rs"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2024"
 description = "Thermal Conduction Simulation Library"
-homepage = "https://github.com/L-P-Lewis/thermal_rs"
+documentation = "https://docs.rs/thermal_rs/latest/thermal_rs/"
 repository = "https://github.com/L-P-Lewis/thermal_rs"
 categories = ["mathematics", "science", "simulation"]
 readme = "README.md"
