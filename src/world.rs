@@ -117,6 +117,7 @@ pub enum SimStateOppError {
 }
 
 /// Represents a world in which a simulation can be run
+#[derive(Debug, Clone)]
 pub struct SimWorld {
     // The x dimension of the simulation world, in cells
     x_size: usize,

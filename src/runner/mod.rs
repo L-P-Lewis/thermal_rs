@@ -5,6 +5,9 @@ use crate::world::{SimState, SimWorld};
 /// Single Threaded CPU based simulator
 pub mod cpu;
 
+/// Multithreaded CPU based simulator
+pub mod threaded;
+
 #[derive(Debug)]
 /// Simulation Runtime Error
 pub enum SimError {
